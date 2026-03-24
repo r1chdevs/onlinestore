@@ -339,7 +339,7 @@ function renderCart() {
         `\n\nTotal: $${subtotal.toFixed(2)}`
       );
       /* TODO: replace with real WhatsApp number */
-      window.open(`https://wa.me/TUNUMERO?text=${message}`, '_blank');
+      window.open(`https://wa.me/593963837148?text=${message}`, '_blank');
     };
   }
 }

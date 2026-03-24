@@ -54,7 +54,6 @@
             </a>
         </nav>
         <div class="flex items-center gap-4">
-            <span class="material-symbols-outlined cursor-pointer">search</span>
         </div>
     </header>
 
@@ -81,14 +80,6 @@
                     <span class="block text-xs font-bold uppercase tracking-wider text-on-surface">Crystal Glass</span>
                     <span class="block text-xs text-secondary mt-1">$ 45.00</span>
                     <button onclick="addToCart(9)" class="mt-2 text-[10px] font-bold uppercase text-secondary hover:underline">Añadir</button>
-                </div>
-                <div class="flex-shrink-0 w-40">
-                    <div class="aspect-square bg-surface-container-lowest rounded-lg mb-3 overflow-hidden">
-                        <img class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" alt="Copper Strainer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtcjMBQGuJqqj8f70xOMUDy7Roa_RDaWeWkIjZN6wIZVGiykMCBlj1LWIHByIoVTqUFBFzr0oXvXQ6sDCzI0q467qViWQvuuKt91ml0jy0YyZa0xKytOdRuh6CRvEGxL2K9ZQrK040tJXDwzBGuwoDdwS1pOcsXe73rGaDI55VrBiG9RmXpFLLPzOUjmiB09KK8i28obPXb3Xn4BSxUv4TM5gkSsE02v6OyxVVwccQ1vPn3CH7qitajfYFynEVNInRNrV_ArIWg"/>
-                    </div>
-                    <span class="block text-xs font-bold uppercase tracking-wider text-on-surface">Copper Strainer</span>
-                    <span class="block text-xs text-secondary mt-1">$ 89.00</span>
-                    <button onclick="addToCart(10)" class="mt-2 text-[10px] font-bold uppercase text-secondary hover:underline">Añadir</button>
                 </div>
             </div>
         </section>
@@ -123,6 +114,38 @@
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="hidden md:block bg-surface-container-low border-t border-outline-variant/10 py-16 px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="flex flex-col gap-4">
+                <div class="text-xl font-black tracking-widest text-[#0f0f12] uppercase font-headline">ATELIER BEVERAGE</div>
+                <p class="text-on-surface-variant text-sm max-w-xs leading-relaxed">
+                    Curando las bebidas más exclusivas del mundo para paladares exigentes. Una experiencia de lujo en cada gota.
+                </p>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h4 class="text-xs uppercase tracking-[0.2em] font-bold text-secondary">Navegación</h4>
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html" class="text-sm text-on-surface hover:text-secondary transition-colors">Inicio</a>
+                    <a href="catalog.html" class="text-sm text-on-surface hover:text-secondary transition-colors">Catálogo</a>
+                    <a href="cart.html" class="text-sm text-on-surface hover:text-secondary transition-colors">Carrito</a>
+                </nav>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h4 class="text-xs uppercase tracking-[0.2em] font-bold text-secondary">Contacto</h4>
+                <p class="text-sm text-on-surface">info@atelierbeverage.com</p>
+                <p class="text-sm text-on-surface">+34 900 000 000</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-outline-variant/10 flex justify-between items-center">
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-medium">© 2026 ATELIER BEVERAGE. TODOS LOS DERECHOS RESERVADOS.</p>
+            <div class="flex gap-6">
+                <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-medium cursor-pointer hover:text-secondary transition-colors">Privacidad</span>
+                <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-medium cursor-pointer hover:text-secondary transition-colors">Términos</span>
+            </div>
+        </div>
+    </footer>
 
     <!-- BottomNavBar (Mobile) -->
     <nav class="md:hidden fixed bottom-0 w-full z-50 bg-[#fff8f0]/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex justify-around items-center h-20 px-4 pb-safe">

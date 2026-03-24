@@ -65,15 +65,6 @@ const products = [
     rating: 4.8
   },
   {
-    id: 8,
-    name: 'Lumiere Brut Reserve',
-    price: 120.00,
-    category: 'Vinos',
-    sub: 'Grand Cru',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDtguA51tPNnyeqLdAvq4Ajq-rXVv39Ih7UFFq36X5nVCJ0LmUsIwHMSxrlnZrTY9TTDt16FvFAfwQXMLgLG1DGDoibSFUhgOkOjneA6qsLCDRwyntC0Zz2_gcgg2OvvE1MojtCT9166CSg8jSQEICWnrxvWhOUk8tPt-RNLtpwCsnsZHgx-ogZA_FyJdLfqFAyeJEbgEJyzHaryXOnw_UtQIUWoNHYw5QHkjOgu3Ze7UpZeSxLbHS5dT2eKUHm-EfVdJN0o2Vg',
-    rating: 4.9
-  },
-  {
     id: 9,
     name: 'Crystal Glass',
     price: 45.00,
@@ -81,15 +72,6 @@ const products = [
     sub: 'Cristalería',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUsUgnKUckuOiml-01vtICcz0pmIx-9C5gy5hyVDH-BE5ve7SDkB1wK7VGc_GKM2FDAMi878cSNzVcJWkXRYx8_AUvChq9n7RowMisub63k0DA5YzQiteX0YXp-ZqWYThyIVJ42qqZHJJlrzeSq9TNZbySmaX7IGMPa3-YW0uh4sryC_NYJiKqwlBgy2CrGpIl6KrxaFB6h7C8HKxqKjLIkU2Wq6niaI-Rkuy1OoH8jEz95fzHF6kByzlbLKVuXakfj0EWZNKOcA',
     rating: 4.5
-  },
-  {
-    id: 10,
-    name: 'Copper Strainer',
-    price: 89.00,
-    category: 'Accesorios',
-    sub: 'Barware',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAtcjMBQGuJqqj8f70xOMUDy7Roa_RDaWeWkIjZN6wIZVGiykMCBlj1LWIHByIoVTqUFBFzr0oXvXQ6sDCzI0q467qViWQvuuKt91ml0jy0YyZa0xKytOdRuh6CRvEGxL2K9ZQrK040tJXDwzBGuwoDdwS1pOcsXe73rGaDI55VrBiG9RmXpFLLPzOUjmiB09KK8i28obPXb3Xn4BSxUv4TM5gkSsE02v6OyxVVwccQ1vPn3CH7qitajfYFynEVNInRNrV_ArIWg',
-    rating: 4.7
   },
   {
     id: 11,
@@ -111,8 +93,10 @@ const products = [
   }
 ];
 
-// Cart State Management
+// Global State
 let cart = JSON.parse(sessionStorage.getItem('atelier_cart')) || {};
+let currentCategory = 'Todos';
+let searchTerm = '';
 
 function saveCart() {
   sessionStorage.setItem('atelier_cart', JSON.stringify(cart));
@@ -159,13 +143,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // Catalog Page Logic
   const catalogGrid = document.getElementById('catalog-grid');
   if (catalogGrid) {
-    renderProducts('Todos');
+    const urlParams = new URLSearchParams(window.location.search);
+    currentCategory = urlParams.get('categoria') || 'Todos';
     
-    // Category Filter Listeners
+    renderProducts();
+    
+    // Update UI for initial filter
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(btn => {
+      const category = btn.getAttribute('data-category');
+      if (category === currentCategory) {
+        btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+        btn.classList.add('bg-primary', 'text-white');
+      } else {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+      }
+    });
+    
+    // Category Filter Listeners
+    filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const category = btn.getAttribute('data-category');
+        currentCategory = btn.getAttribute('data-category');
         
         // Update UI
         filterButtons.forEach(b => {
@@ -175,9 +174,46 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
         btn.classList.add('bg-primary', 'text-white');
         
-        renderProducts(category);
+        renderProducts();
       });
     });
+
+    // Search Logic
+    const searchToggle = document.getElementById('search-toggle');
+    const searchContainer = document.getElementById('search-container');
+    const searchInput = document.getElementById('search-input');
+
+    if (searchToggle && searchContainer && searchInput) {
+      searchToggle.addEventListener('click', () => {
+        const isOpening = searchContainer.classList.contains('w-0');
+        if (isOpening) {
+          searchContainer.classList.remove('w-0', 'opacity-0');
+          searchContainer.classList.add('w-40', 'md:w-64', 'opacity-100', 'px-2');
+          searchInput.focus();
+        } else {
+          closeSearch();
+        }
+      });
+
+      searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        renderProducts();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !searchContainer.classList.contains('w-0')) {
+          closeSearch();
+        }
+      });
+
+      function closeSearch() {
+        searchContainer.classList.add('w-0', 'opacity-0');
+        searchContainer.classList.remove('w-40', 'md:w-64', 'opacity-100', 'px-2');
+        searchInput.value = '';
+        searchTerm = '';
+        renderProducts();
+      }
+    }
   }
 
   // Cart Page Logic
@@ -187,13 +223,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function renderProducts(filterCategory) {
+function renderProducts() {
   const catalogGrid = document.getElementById('catalog-grid');
   if (!catalogGrid) return;
 
-  const filtered = filterCategory === 'Todos' 
+  let filtered = currentCategory === 'Todos' 
     ? products.filter(p => p.category !== 'Accesorios' && p.category !== 'Colecciones') 
-    : products.filter(p => p.category === filterCategory);
+    : products.filter(p => p.category === currentCategory);
+
+  if (searchTerm) {
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(searchTerm) || 
+      p.category.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (filtered.length === 0) {
+    catalogGrid.innerHTML = `
+      <div class="col-span-full py-20 text-center">
+        <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">search_off</span>
+        <p class="text-on-surface-variant font-medium">No se encontraron productos</p>
+      </div>
+    `;
+    return;
+  }
 
   catalogGrid.innerHTML = filtered.map(product => `
     <div class="group flex flex-col gap-4">
